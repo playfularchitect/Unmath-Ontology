@@ -1,5 +1,5 @@
 # Unmath-Ontology
-# Multi-Scale Consciousness Emergence Engine
+# Nothing To Something Simulator
 ## "Cosmogenesis in Executable Form"
 
 **Reality Genesis from Pure Relational Tension**  
