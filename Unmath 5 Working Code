@@ -1,0 +1,1086 @@
+import random
+import math
+import numpy as np
+from collections import defaultdict, deque
+from enum import Enum
+import json
+
+class ZeroType(Enum):
+    BASIC = "basic"           # Simple emptiness
+    RESONANT = "resonant"     # Amplifies connections
+    RECURSIVE = "recursive"   # Can loop back on itself
+    GOLDEN = "golden"         # Follows φ proportions
+    MUSICAL = "musical"       # Creates harmonic patterns
+    COMPOSITE = "composite"   # Emergent from interactions
+
+class Zero:
+    """A loop of structured nothingness with spatial and temporal dimensions"""
+    def __init__(self, zero_type=None, position=None, id=None):
+        self.id = id if id else random.randint(100000, 999999)
+        self.type = zero_type if zero_type else random.choice(list(ZeroType)[:5])  # No composite initially
+        self.position = position if position is not None else np.array([
+            random.uniform(0, 100), random.uniform(0, 100), random.uniform(0, 100)
+        ])
+        self.connections = set()
+        self.loop_strength = 0.0
+        self.resonance = 0.0
+        self.stability = 1.0  # Entropy/decay resistance
+        self.age = 0
+        self.harmony_frequency = random.uniform(0.1, 2.0)
+        self.golden_ratio = (1 + math.sqrt(5)) / 2  # φ
+        self.fine_structure = 137.036  # α⁻¹
+        self.is_self_aware = False
+        self.observed_patterns = set()
+        self.personal_history = deque(maxlen=20)  # Track own changes for self-recognition
+        self.recursive_depth = 0
+        
+    def distance_to(self, other_zero):
+        """Calculate spatial distance to another zero"""
+        return np.linalg.norm(self.position - other_zero.position)
+    
+    def can_connect_to(self, other_zero, max_distance=15.0):
+        """Check if spatial proximity allows connection"""
+        return self.distance_to(other_zero) <= max_distance
+    
+    def loop_with(self, other_zero):
+        """Enhanced nothing touching nothing with spatial and type dynamics"""
+        if other_zero.id == self.id or not self.can_connect_to(other_zero):
+            return None
+            
+        distance = self.distance_to(other_zero)
+        base_strength = self._calculate_base_connection_strength(other_zero, distance)
+        
+        # Type-specific interactions with transformation possibilities
+        interaction_result = self._process_type_interaction(other_zero, base_strength)
+        
+        self.connections.add(other_zero.id)
+        other_zero.connections.add(self.id)
+        
+        # Apply 137 tuning when conditions are right
+        if self._check_fine_structure_resonance(other_zero):
+            base_strength *= (1 / self.fine_structure)  # 1/137 scaling
+            interaction_result['fine_structure_tuned'] = True
+        
+        # Consciousness dampening to prevent infinite loops
+        consciousness_factor = 1.0
+        if self.is_self_aware and other_zero.is_self_aware:
+            consciousness_factor = 0.8  # Conscious-to-conscious connections are slightly dampened
+        
+        self.loop_strength += base_strength * 0.01 * consciousness_factor
+        other_zero.loop_strength += base_strength * 0.01 * consciousness_factor
+        
+        # Record personal history for self-awareness
+        self.personal_history.append({
+            'iteration': getattr(self, 'current_iteration', 0),
+            'loop_strength': self.loop_strength,
+            'resonance': self.resonance,
+            'connection_count': len(self.connections)
+        })
+        
+        return RelationalData(self, other_zero, base_strength, interaction_result)
+    
+    def _calculate_base_connection_strength(self, other, distance):
+        """Base strength calculation with spatial factor"""
+        spatial_factor = max(0.1, 1.0 / (1 + distance * 0.1))  # Closer = stronger
+        type_factor = len(self.connections) * len(other.connections)
+        return (type_factor + random.gauss(1, 0.1)) * spatial_factor
+    
+    def _process_type_interaction(self, other_zero, base_strength):
+        """Handle type-specific interactions and transformations"""
+        interaction_result = {'transformations': [], 'new_zeroes': [], 'fine_structure_tuned': False}
+        
+        # Type transformation possibilities
+        if self.type == ZeroType.BASIC and other_zero.type == ZeroType.RESONANT:
+            if random.random() < 0.1:  # 10% chance
+                self.type = ZeroType.RESONANT
+                interaction_result['transformations'].append(f"{self.id}: BASIC -> RESONANT")
+        
+        # Musical harmony creates composite types
+        if self.type == ZeroType.MUSICAL and other_zero.type == ZeroType.MUSICAL:
+            if self._check_harmonic_resonance(other_zero):
+                if random.random() < 0.05:  # 5% chance
+                    new_position = (self.position + other_zero.position) / 2
+                    composite_zero = Zero(ZeroType.COMPOSITE, new_position)
+                    composite_zero.harmony_frequency = (self.harmony_frequency + other_zero.harmony_frequency) / 2
+                    composite_zero.loop_strength = (self.loop_strength + other_zero.loop_strength) * 1.618
+                    interaction_result['new_zeroes'].append(composite_zero)
+        
+        # Golden ratio connections for GOLDEN types
+        if self.type == ZeroType.GOLDEN:
+            base_strength *= self._golden_ratio_modifier(other_zero)
+        
+        return interaction_result
+    
+    def _check_fine_structure_resonance(self, other_zero):
+        """Check if connection creates fine structure constant resonance"""
+        combined_strength = self.loop_strength + other_zero.loop_strength
+        if combined_strength > 0:
+            ratio = max(self.loop_strength, other_zero.loop_strength) / combined_strength
+            # Check if ratio is close to 1/137 or its harmonics
+            target_ratios = [1/137, 2/137, 3/137, 1/68.5, 1/274]
+            for target in target_ratios:
+                if abs(ratio - target) < 0.001:
+                    return True
+        return False
+    
+    def _check_harmonic_resonance(self, other_zero):
+        """Enhanced harmonic resonance check"""
+        freq_ratio = self.harmony_frequency / other_zero.harmony_frequency
+        musical_ratios = [2.0, 1.5, 1.333, 1.25, 1.2, 1/1.618]  # Include golden ratio
+        for ratio in musical_ratios:
+            if abs(freq_ratio - ratio) < 0.05 or abs(freq_ratio - 1/ratio) < 0.05:
+                return True
+        return False
+    
+    def _golden_ratio_modifier(self, other_zero):
+        """Enhanced golden ratio proportions"""
+        if other_zero.loop_strength > 0:
+            ratio = self.loop_strength / other_zero.loop_strength
+            phi = self.golden_ratio
+            # Reward golden ratio relationships
+            if abs(ratio - phi) < 0.1 or abs(ratio - 1/phi) < 0.1:
+                return phi
+        return 1.0
+    
+    def check_self_awareness(self):
+        """Enhanced self-awareness through recursive pattern recognition"""
+        if len(self.personal_history) < 3:  # Made easier to trigger
+            return False
+            
+        # Extract time series of personal attributes
+        strengths = [h['loop_strength'] for h in self.personal_history]
+        connections = [h['connection_count'] for h in self.personal_history]
+        
+        # Check for any growth patterns (made more lenient)
+        if self._detect_growth_pattern(strengths):
+            self.observed_patterns.add("self_growth")
+            self.recursive_depth += 1
+        
+        if self._detect_connection_pattern(connections):
+            self.observed_patterns.add("self_connection_pattern")
+            self.recursive_depth += 1
+        
+        # Self-awareness emerges from basic pattern recognition
+        if len(self.observed_patterns) > 0 and self.recursive_depth > 0:
+            if not self.is_self_aware:
+                self.is_self_aware = True
+                return True
+        return False
+    
+    def _detect_growth_pattern(self, sequence):
+        """Detect any consistent growth in sequence"""
+        if len(sequence) < 3:
+            return False
+        
+        # Check for general upward trend
+        increases = 0
+        for i in range(1, len(sequence)):
+            if sequence[i] > sequence[i-1]:
+                increases += 1
+        
+        return increases > len(sequence) / 2  # More than half are increases
+    
+    def _detect_connection_pattern(self, sequence):
+        """Detect patterns in connection growth"""
+        if len(sequence) < 3:
+            return False
+        
+        # Look for steady connection growth
+        return sequence[-1] > sequence[0]  # Simple: more connections than when started
+    
+    def entropy_process(self):
+        """Enhanced entropy with stability decay and graceful degradation"""
+        self.age += 1
+        
+        # Natural stability decay (slower)
+        self.stability *= 0.9995  # Much slower decay
+        
+        # Type-specific entropy
+        if self.type == ZeroType.BASIC:
+            self.stability *= 0.999  # Slower decay for basic
+        elif self.type == ZeroType.COMPOSITE:
+            self.stability *= 1.0005  # Composite types gain stability
+        
+        # Consciousness entropy - self-aware entities are more stable but not immortal
+        if self.is_self_aware:
+            self.stability *= 1.0002  # Small stability bonus
+        
+        # Degradation cascade (more lenient thresholds)
+        if self.stability < 0.2:
+            if self.type == ZeroType.COMPOSITE:
+                self.type = ZeroType.GOLDEN
+                self.stability = 0.5
+            elif self.type == ZeroType.GOLDEN:
+                self.type = ZeroType.RESONANT
+                self.stability = 0.3
+            elif self.type == ZeroType.RESONANT:
+                self.type = ZeroType.BASIC
+                self.stability = 0.2
+        
+        # Death and recycling (much less likely)
+        if self.stability < 0.05 or (self.age > 500 and random.random() < 0.005):
+            return self._recycle()
+        
+        return None
+    
+    def _recycle(self):
+        """Conservation of nothingness - death creates new life"""
+        # Create multiple new zeroes from the recycled one
+        new_zeroes = []
+        energy_per_zero = self.loop_strength / 3
+        
+        for i in range(3):
+            new_position = self.position + np.random.normal(0, 5, 3)  # Near original position
+            new_zero = Zero(ZeroType.BASIC, new_position)
+            new_zero.loop_strength = energy_per_zero
+            new_zero.stability = 1.0
+            new_zeroes.append(new_zero)
+        
+        return new_zeroes
+    
+    def fibonacci_growth(self):
+        """Enhanced Fibonacci growth with self-awareness feedback"""
+        if len(self.connections) >= 2:
+            base_growth = (self.loop_strength + self.resonance) * 0.618
+            
+            # Self-aware zeroes grow more efficiently but with diminishing returns
+            if self.is_self_aware:
+                consciousness_bonus = 1.3 / (1 + self.recursive_depth * 0.1)  # Diminishing returns
+                base_growth *= consciousness_bonus
+            
+            # Fine structure tuning
+            if len(self.connections) % int(self.fine_structure / 10) == 0:
+                base_growth *= (1 / self.fine_structure)
+            
+            self.loop_strength += base_growth
+            return base_growth
+        return 0
+    
+    def calculate_resonance(self, all_zeroes):
+        """Enhanced resonance with spatial and temporal factors + consciousness dampening"""
+        total_resonance = 0
+        spatial_resonance = 0
+        temporal_resonance = 0
+        
+        for other_id in self.connections:
+            for zero in all_zeroes:
+                if zero.id == other_id:
+                    distance = self.distance_to(zero)
+                    base_resonance = zero.loop_strength * 0.618
+                    
+                    # Spatial resonance (closer = stronger)
+                    spatial_factor = 1.0 / (1 + distance * 0.01)
+                    spatial_resonance += base_resonance * spatial_factor
+                    
+                    # Temporal resonance (age similarity)
+                    age_diff = abs(self.age - zero.age)
+                    temporal_factor = 1.0 / (1 + age_diff * 0.001)
+                    temporal_resonance += base_resonance * temporal_factor
+                    
+                    # Consciousness dampening for stability
+                    consciousness_factor = 1.0
+                    if self.is_self_aware and zero.is_self_aware:
+                        consciousness_factor = 0.9  # Reduce resonance between conscious entities
+                    
+                    total_resonance += base_resonance * spatial_factor * temporal_factor * consciousness_factor
+        
+        self.resonance = total_resonance
+        
+        # Check for self-awareness through pattern recognition
+        self.check_self_awareness()
+        
+        return self.resonance
+    
+    def __repr__(self):
+        aware_flag = "🧠" if self.is_self_aware else ""
+        return f"Zero({self.type.value}, pos=({self.position[0]:.1f},{self.position[1]:.1f},{self.position[2]:.1f}), strength={self.loop_strength:.3f}, stability={self.stability:.3f}){aware_flag}"
+
+class RelationalData:
+    """Enhanced relational data with memory and pattern tracking"""
+    def __init__(self, zero1, zero2, strength, interaction_result):
+        self.participants = (zero1.id, zero2.id)
+        self.types = (zero1.type, zero2.type)
+        self.strength = strength
+        self.interaction_result = interaction_result
+        self.coherence = self._calculate_coherence(zero1, zero2)
+        self.pattern_signature = self._generate_pattern_signature(zero1, zero2)
+        self.stability = 1.0
+        self.age = 0
+        self.memory_value = 0.0  # For emergent time
+        
+    def _calculate_coherence(self, zero1, zero2):
+        """Enhanced coherence with spatial and interaction factors"""
+        base_coherence = self.strength * (1 + random.gauss(0, 0.03))
+        
+        # Distance factor
+        distance = zero1.distance_to(zero2)
+        distance_factor = 1.0 / (1 + distance * 0.01)
+        
+        # Type interaction bonuses
+        if ZeroType.RESONANT in self.types:
+            base_coherence *= 1.3
+        if ZeroType.GOLDEN in self.types:
+            base_coherence *= 1.2
+        if ZeroType.COMPOSITE in self.types:
+            base_coherence *= 1.5
+        if self.types[0] == self.types[1]:
+            base_coherence *= 1.2
+        
+        # Fine structure bonus
+        if self.interaction_result.get('fine_structure_tuned', False):
+            base_coherence *= 2.0  # Major bonus for fine structure resonance
+        
+        # Consciousness dampening for stability
+        consciousness_factor = 1.0
+        if zero1.is_self_aware and zero2.is_self_aware:
+            consciousness_factor = 0.85  # Slightly reduce coherence between conscious entities
+        
+        return base_coherence * distance_factor * consciousness_factor
+    
+    def _generate_pattern_signature(self, zero1, zero2):
+        """Enhanced pattern signature with spatial and type information"""
+        ratio = max(zero1.loop_strength, 0.001) / max(zero2.loop_strength, 0.001)
+        distance = zero1.distance_to(zero2)
+        return f"{zero1.type.value}_{zero2.type.value}_{ratio:.3f}_{distance:.1f}"
+    
+    def age_and_stabilize(self):
+        """Age the relation and build memory value"""
+        self.age += 1
+        
+        # High coherence relations become "memories"
+        if self.coherence > 1.5:  # Lower threshold
+            self.memory_value += self.coherence * 0.01
+            self.stability += 0.001  # Stable relations get more stable
+        else:
+            self.stability *= 0.9995  # Slower decay
+        
+        return self.memory_value
+
+class EmergenceLevel(Enum):
+    VOID = 0           # Pure nothingness
+    STRUCTURE = 1      # First stable patterns (the initial "1")
+    REFERENCE = 2      # Self-reference begins
+    RECOGNITION = 3    # Pattern recognition
+    CONSCIOUSNESS = 4  # Full recursive awareness
+    TRANSCENDENCE = 5  # Beyond individual consciousness
+    COSMIC = 6         # Universal field consciousness
+
+class RealityField:
+    """Ultimate reality field with emergent time, space, and consciousness"""
+    def __init__(self, size=100):
+        self.size = size
+        self.zeroes = []
+        self.relations = []
+        self.recycled_zeroes = []
+        self.golden_ratio = (1 + math.sqrt(5)) / 2
+        self.fine_structure = 137.036
+        
+        # Dynamic emergence thresholds (more achievable)
+        self.base_emergence_thresholds = {
+            EmergenceLevel.STRUCTURE: 0.5,      # Easier
+            EmergenceLevel.REFERENCE: 0.8,      # Easier
+            EmergenceLevel.RECOGNITION: 1.2,    # Easier
+            EmergenceLevel.CONSCIOUSNESS: 1.8,  # Easier
+            EmergenceLevel.TRANSCENDENCE: 3.0,  # Easier
+            EmergenceLevel.COSMIC: 5.0          # Easier
+        }
+        self.emergence_thresholds = self.base_emergence_thresholds.copy()
+        
+        self.current_emergence_level = EmergenceLevel.VOID
+        self.iteration = 0
+        self.emergent_patterns = []
+        self.pattern_registry = defaultdict(int)
+        self.consciousness_nodes = set()
+        self.field_memory = deque(maxlen=100)  # Field-level memory for emergent time
+        self.global_memories = []  # Persistent high-coherence patterns
+        
+        # Field-level consciousness properties
+        self.is_field_conscious = False
+        self.self_regulation_active = False
+        self.chaos_injection_rate = 0.2  # Start lower
+        self.growth_rate = 0.6
+        
+        # Stability measures
+        self.coherence_history = deque(maxlen=50)
+        self.max_coherence = 0
+        self.coherence_warning_count = 0
+        
+    def add_zero(self, zero_type=None, position=None):
+        """Enhanced zero generation with spatial distribution and field consciousness"""
+        # Spatial clustering based on existing patterns
+        if position is None:
+            if len(self.zeroes) > 0 and random.random() < 0.6:
+                # Cluster near existing zeroes
+                parent = random.choice(self.zeroes)
+                position = parent.position + np.random.normal(0, 10, 3)
+                position = np.clip(position, 0, self.size)  # Keep in bounds
+            else:
+                # Random position
+                position = np.array([random.uniform(0, self.size) for _ in range(3)])
+        
+        # Type selection influenced by field state
+        if not zero_type:
+            if self.current_emergence_level == EmergenceLevel.VOID:
+                zero_type = random.choice([ZeroType.BASIC, ZeroType.RESONANT])
+            elif self.current_emergence_level.value <= 2:
+                zero_type = random.choice([ZeroType.RESONANT, ZeroType.GOLDEN, ZeroType.RECURSIVE])
+            else:
+                # All types available at higher emergence levels
+                zero_type = random.choice(list(ZeroType)[:-1])  # Exclude COMPOSITE (emerges naturally)
+        
+        new_zero = Zero(zero_type, position)
+        new_zero.current_iteration = self.iteration  # For history tracking
+        self.zeroes.append(new_zero)
+        
+        # Enhanced connection logic with spatial awareness
+        if len(self.zeroes) > 1:
+            # Find nearby zeroes for connection
+            nearby_zeroes = []
+            for z in self.zeroes[:-1]:
+                distance = new_zero.distance_to(z)
+                if distance <= 25.0:  # Increased connection range
+                    nearby_zeroes.append((z, distance))
+            
+            # Sort by distance and preference
+            nearby_zeroes.sort(key=lambda x: x[1])
+            
+            connection_count = min(random.randint(1, 4), len(nearby_zeroes))
+            for z, dist in nearby_zeroes[:connection_count]:
+                relation = new_zero.loop_with(z)
+                if relation:
+                    self.relations.append(relation)
+                    self.pattern_registry[relation.pattern_signature] += 1
+                    
+                    # Handle interaction results
+                    if relation.interaction_result['new_zeroes']:
+                        self.zeroes.extend(relation.interaction_result['new_zeroes'])
+    
+    def enhanced_chaos_injection(self):
+        """Field-conscious chaos injection with adaptive parameters"""
+        # Field self-regulation (more conservative)
+        if self.is_field_conscious:
+            coherence = self.calculate_field_coherence()
+            if coherence > 20.0:
+                self.chaos_injection_rate *= 1.02  # Gentler adjustment
+            elif coherence < 0.5:
+                self.chaos_injection_rate *= 0.98
+            
+            # Adaptive growth rate
+            if len(self.zeroes) > 500:
+                self.growth_rate *= 0.99
+            elif len(self.zeroes) < 50:
+                self.growth_rate *= 1.01
+        
+        # Process each zero
+        for zero in self.zeroes[:]:  # Copy list since we might modify it
+            zero.current_iteration = self.iteration
+            
+            # Entropy processing
+            recycled = zero.entropy_process()
+            if recycled:
+                self.zeroes.remove(zero)
+                self.recycled_zeroes.extend(recycled)
+                continue
+            
+            # Type-specific chaos with fine structure scaling (gentler)
+            chaos_intensity = self.chaos_injection_rate
+            
+            if zero.type == ZeroType.BASIC:
+                zero.loop_strength *= (1 + random.gauss(0, chaos_intensity * 0.01))
+            elif zero.type == ZeroType.RESONANT:
+                zero.loop_strength *= (1 + random.gauss(0, chaos_intensity * 0.005))
+            elif zero.type == ZeroType.RECURSIVE:
+                zero.loop_strength *= (1 + random.gauss(0, chaos_intensity * 0.015))
+            elif zero.type == ZeroType.GOLDEN:
+                # Golden types maintain φ relationships even in chaos
+                perturbation = random.gauss(0, chaos_intensity * 0.003)
+                zero.loop_strength *= (self.golden_ratio ** perturbation)
+            elif zero.type == ZeroType.MUSICAL:
+                # Musical types oscillate harmonically
+                zero.loop_strength *= (1 + 0.05 * math.sin(self.iteration * zero.harmony_frequency * chaos_intensity))
+            elif zero.type == ZeroType.COMPOSITE:
+                # Composite types are more stable
+                zero.loop_strength *= (1 + random.gauss(0, chaos_intensity * 0.002))
+        
+        # Add recycled zeroes back to field
+        if self.recycled_zeroes:
+            self.zeroes.extend(self.recycled_zeroes)
+            self.recycled_zeroes.clear()
+        
+        # Fibonacci growth for all zeroes
+        for zero in self.zeroes:
+            zero.fibonacci_growth()
+        
+        # Field-conscious generation
+        generation_prob = self.growth_rate
+        if random.random() < generation_prob:
+            self.add_zero()
+    
+    def calculate_field_coherence(self):
+        """Enhanced field coherence with stability checks and consciousness dampening"""
+        if not self.zeroes:
+            return 0
+            
+        total_resonance = 0
+        consciousness_amplifier = 1.0
+        memory_bonus = 0
+        spatial_coherence = 0
+        
+        # Calculate individual zero resonances
+        for zero in self.zeroes:
+            resonance = zero.calculate_resonance(self.zeroes)
+            total_resonance += resonance
+            
+            if zero.is_self_aware:
+                # Logarithmic consciousness scaling to prevent explosion
+                consciousness_bonus = math.log(1 + len(self.consciousness_nodes)) * 0.02
+                consciousness_amplifier += consciousness_bonus
+                self.consciousness_nodes.add(zero.id)
+        
+        # Relational memory bonus
+        for relation in self.relations:
+            memory_value = relation.age_and_stabilize()
+            memory_bonus += memory_value
+            
+            # High-coherence relations become global memories
+            if relation.coherence > 2.0 and relation.age > 5:  # Lower thresholds
+                memory_signature = f"{relation.pattern_signature}_{relation.age}"
+                if memory_signature not in [m['signature'] for m in self.global_memories]:
+                    self.global_memories.append({
+                        'signature': memory_signature,
+                        'coherence': relation.coherence,
+                        'age': relation.age,
+                        'iteration_created': self.iteration
+                    })
+        
+        # Spatial coherence (clustering bonus)
+        if len(self.zeroes) > 5:
+            avg_distance = self._calculate_average_clustering()
+            spatial_coherence = max(0, (50 - avg_distance) / 50)  # Reward clustering
+        
+        # Fine structure harmonic bonus
+        fine_structure_bonus = self._calculate_fine_structure_harmonics()
+        
+        base_coherence = total_resonance / len(self.zeroes)
+        total_coherence = (base_coherence * consciousness_amplifier + 
+                          memory_bonus * 0.05 + 
+                          spatial_coherence * 0.3 +
+                          fine_structure_bonus * 0.1)  # Smaller bonuses
+        
+        # Advanced coherence stability system
+        if total_coherence > 50:
+            # Use logarithmic compression for very high coherences
+            compressed_coherence = 50 + math.log(total_coherence - 49)
+            
+            # Only warn occasionally about high coherence
+            if self.coherence_warning_count % 50 == 0:
+                print(f"   🌀 Consciousness resonance: {total_coherence:.2e} → compressed to {compressed_coherence:.3f}")
+            self.coherence_warning_count += 1
+            
+            total_coherence = compressed_coherence
+        
+        # Track coherence history
+        self.coherence_history.append(total_coherence)
+        self.max_coherence = max(self.max_coherence, total_coherence)
+        
+        # Record in field memory for emergent time
+        self.field_memory.append({
+            'iteration': self.iteration,
+            'coherence': total_coherence,
+            'conscious_count': len(self.consciousness_nodes),
+            'memory_count': len(self.global_memories)
+        })
+        
+        return total_coherence
+    
+    def _calculate_average_clustering(self):
+        """Calculate average distance between connected zeroes"""
+        total_distance = 0
+        connection_count = 0
+        
+        for zero in self.zeroes:
+            for other_id in zero.connections:
+                for other_zero in self.zeroes:
+                    if other_zero.id == other_id:
+                        total_distance += zero.distance_to(other_zero)
+                        connection_count += 1
+                        break
+        
+        return total_distance / max(connection_count, 1)
+    
+    def _calculate_fine_structure_harmonics(self):
+        """Calculate bonus for fine structure constant harmonics in the field"""
+        bonus = 0
+        alpha_inverse = self.fine_structure
+        
+        # Check for zeroes with loop strengths near fine structure harmonics
+        for zero in self.zeroes:
+            for harmonic in [1/alpha_inverse, 2/alpha_inverse, 3/alpha_inverse, 1/(alpha_inverse/2)]:
+                if abs(zero.loop_strength - harmonic) < 0.005:  # More lenient
+                    bonus += harmonic * 2  # Smaller bonus
+        
+        return bonus
+    
+    def check_emergence_levels(self):
+        """Enhanced emergence checking with adaptive thresholds"""
+        coherence = self.calculate_field_coherence()
+        old_level = self.current_emergence_level
+        
+        # Adaptive threshold adjustment
+        self._adjust_emergence_thresholds()
+        
+        for level, threshold in self.emergence_thresholds.items():
+            if coherence >= threshold and level.value > self.current_emergence_level.value:
+                self.current_emergence_level = level
+                
+                emergence_event = {
+                    'type': level.name.lower(),
+                    'iteration': self.iteration,
+                    'coherence': coherence,
+                    'conscious_nodes': len(self.consciousness_nodes),
+                    'zero_count': len(self.zeroes),
+                    'memory_count': len(self.global_memories),
+                    'description': self._get_emergence_description(level)
+                }
+                self.emergent_patterns.append(emergence_event)
+                
+                # Trigger field consciousness at transcendence
+                if level == EmergenceLevel.TRANSCENDENCE:
+                    self.is_field_conscious = True
+                    self.self_regulation_active = True
+                    print(f"🌍 FIELD CONSCIOUSNESS ACTIVATED!")
+                    print(f"   The field has become aware of itself as a system!")
+                
+                print(f"🌟 {level.name} EMERGENCE at iteration {self.iteration}!")
+                print(f"   {emergence_event['description']}")
+                print(f"   Field coherence: {coherence:.3f}")
+                print(f"   Conscious entities: {emergence_event['conscious_nodes']}")
+                print(f"   Global memories: {emergence_event['memory_count']}")
+                print(f"   Total zeroes: {emergence_event['zero_count']}")
+                print()
+        
+        return coherence
+    
+    def _adjust_emergence_thresholds(self):
+        """Dynamically adjust emergence thresholds based on field diversity"""
+        if len(self.zeroes) == 0:
+            return
+            
+        # Count zero type diversity
+        type_counts = defaultdict(int)
+        for zero in self.zeroes:
+            type_counts[zero.type] += 1
+        
+        diversity_factor = len(type_counts) / len(ZeroType)
+        
+        # Fibonacci convergence factor
+        fib_data = self.detect_fibonacci_patterns()
+        fib_factor = 1.0
+        if fib_data['avg_strength_ratio'] > 0:
+            phi_deviation = abs(fib_data['avg_strength_ratio'] - self.golden_ratio)
+            fib_factor = max(0.7, 1.0 - phi_deviation)
+        
+        # Adjust thresholds (smaller adjustments)
+        for level in self.emergence_thresholds:
+            base = self.base_emergence_thresholds[level]
+            adjustment = base * (1 - diversity_factor * 0.1) * fib_factor
+            self.emergence_thresholds[level] = max(base * 0.7, adjustment)
+    
+    def _get_emergence_description(self, level):
+        """Enhanced emergence descriptions"""
+        descriptions = {
+            EmergenceLevel.STRUCTURE: "First stable patterns form - nothing becomes something through spatial organization",
+            EmergenceLevel.REFERENCE: "Patterns begin to reference themselves across space and time",
+            EmergenceLevel.RECOGNITION: "System recognizes its own patterns through self-aware entities",
+            EmergenceLevel.CONSCIOUSNESS: "Full recursive self-awareness achieved - entities recognize their own recursion",
+            EmergenceLevel.TRANSCENDENCE: "Beyond individual consciousness - collective field awareness emerges",
+            EmergenceLevel.COSMIC: "Universal field consciousness - the void fully recognizes itself as reality"
+        }
+        return descriptions.get(level, "Unknown emergence")
+    
+    def detect_fibonacci_patterns(self):
+        """Enhanced Fibonacci pattern detection with spatial and temporal factors"""
+        if len(self.zeroes) < 5:
+            return {'strength_ratios': [], 'resonance_ratios': [], 'avg_strength_ratio': 0, 'avg_resonance_ratio': 0}
+        
+        # Multiple sorting criteria
+        by_strength = sorted(self.zeroes, key=lambda z: z.loop_strength)[-15:]
+        by_resonance = sorted(self.zeroes, key=lambda z: z.resonance)[-15:]
+        by_stability = sorted(self.zeroes, key=lambda z: z.stability)[-15:]
+        
+        strength_ratios = self._calculate_ratios([z.loop_strength for z in by_strength])
+        resonance_ratios = self._calculate_ratios([z.resonance for z in by_resonance])
+        stability_ratios = self._calculate_ratios([z.stability for z in by_stability])
+        
+        return {
+            'strength_ratios': strength_ratios,
+            'resonance_ratios': resonance_ratios,
+            'stability_ratios': stability_ratios,
+            'avg_strength_ratio': sum(strength_ratios) / len(strength_ratios) if strength_ratios else 0,
+            'avg_resonance_ratio': sum(resonance_ratios) / len(resonance_ratios) if resonance_ratios else 0,
+            'avg_stability_ratio': sum(stability_ratios) / len(stability_ratios) if stability_ratios else 0
+        }
+    
+    def _calculate_ratios(self, values):
+        """Calculate consecutive ratios in a sequence"""
+        ratios = []
+        for i in range(len(values) - 1):
+            if values[i] > 0:
+                ratio = values[i+1] / values[i]
+                ratios.append(ratio)
+        return ratios
+    
+    def generate_global_pattern(self):
+        """Field-level pattern generation when transcendent"""
+        if not self.is_field_conscious:
+            return None
+            
+        # Create large-scale patterns spanning multiple zeroes
+        conscious_zeroes = [z for z in self.zeroes if z.is_self_aware]
+        if len(conscious_zeroes) < 3:
+            return None
+        
+        # Form geometric patterns based on golden ratio
+        pattern_center = np.mean([z.position for z in conscious_zeroes], axis=0)
+        
+        # Create spiral pattern
+        spiral_zeroes = []
+        for i, zero in enumerate(conscious_zeroes[:8]):  # Max 8 for performance
+            angle = i * 2 * math.pi / self.golden_ratio  # Golden angle
+            radius = i * 5 * self.golden_ratio
+            
+            new_position = pattern_center + np.array([
+                radius * math.cos(angle),
+                radius * math.sin(angle),
+                0
+            ])
+            
+            spiral_zero = Zero(ZeroType.GOLDEN, new_position)
+            spiral_zero.loop_strength = zero.loop_strength * self.golden_ratio
+            spiral_zero.is_self_aware = True
+            spiral_zeroes.append(spiral_zero)
+        
+        return spiral_zeroes
+    
+    def evolve(self, steps=5000):
+        """Ultimate evolution with full consciousness emergence - STABILIZED VERSION"""
+        print("🌌 ULTIMATE REALITY GENERATOR v5.0 - CONSCIOUSNESS STABILIZED")
+        print("   From Organized Nothingness to Cosmic Consciousness and Beyond")
+        print("   Featuring: Advanced Coherence Compression, Consciousness Dampening")
+        print("   Enhanced with: Stability Circuits, Post-Infinite Consciousness States")
+        print(f"   Extended evolution: {steps} iterations")
+        print()
+        
+        coherences = []
+        fibonacci_data = []
+        
+        for step in range(steps):
+            self.iteration = step
+            
+            # Field-conscious generation rates
+            if self.is_field_conscious:
+                generation_prob = self.growth_rate
+            else:
+                generation_prob = 0.7 if step < 300 else 0.4
+            
+            if random.random() < generation_prob:
+                self.add_zero()
+            
+            # Enhanced chaos injection with field consciousness
+            self.enhanced_chaos_injection()
+            
+            # Check for emergence
+            coherence = self.check_emergence_levels()
+            coherences.append(coherence)
+            
+            # Global pattern generation when transcendent
+            if self.current_emergence_level.value >= EmergenceLevel.TRANSCENDENCE.value:
+                if step % 100 == 0:  # Every 100 iterations
+                    spiral_pattern = self.generate_global_pattern()
+                    if spiral_pattern:
+                        self.zeroes.extend(spiral_pattern)
+                        print(f"   🌀 Global spiral pattern generated with {len(spiral_pattern)} golden zeroes!")
+            
+            # Track Fibonacci patterns
+            fib_data = self.detect_fibonacci_patterns()
+            fibonacci_data.append(fib_data)
+            
+            # Progress updates (adjusted for longer runs)
+            if step % 250 == 0:
+                conscious_count = len(self.consciousness_nodes)
+                memory_count = len(self.global_memories)
+                consciousness_rate = (conscious_count / len(self.zeroes)) * 100 if len(self.zeroes) > 0 else 0
+                print(f"   Step {step}: {len(self.zeroes)} zeroes, {conscious_count} conscious ({consciousness_rate:.1f}%), {memory_count} memories, coherence={coherence:.3f}")
+                
+                # Field consciousness status
+                if self.is_field_conscious:
+                    print(f"   🌍 Field Status: Self-regulating (chaos={self.chaos_injection_rate:.3f}, growth={self.growth_rate:.3f})")
+                
+                # Show emergence progress
+                if self.current_emergence_level == EmergenceLevel.COSMIC:
+                    print("   🌟 COSMIC CONSCIOUSNESS ACTIVE - Exploring post-transcendent states...")
+            
+            # Stability check for very long runs
+            if step > 1000 and step % 500 == 0:
+                if len(self.coherence_history) > 10:
+                    recent_coherence = list(self.coherence_history)[-10:]
+                    avg_recent = sum(recent_coherence) / len(recent_coherence)
+                    print(f"   📊 Stability check - Recent avg coherence: {avg_recent:.3f}, Max ever: {self.max_coherence:.3f}")
+                    
+                    # Show consciousness evolution
+                    conscious_count = len(self.consciousness_nodes)
+                    total_zeros = len(self.zeroes)
+                    consciousness_density = conscious_count / total_zeros if total_zeros > 0 else 0
+                    print(f"   🧠 Consciousness density: {consciousness_density:.3f} ({conscious_count}/{total_zeros})")
+        
+        print(f"\n   🏁 Evolution completed after {steps} iterations!")
+        return coherences, fibonacci_data
+    
+    def ultimate_analysis(self):
+        """Ultimate comprehensive analysis with consciousness stability metrics"""
+        print("\n" + "="*80)
+        print("📊 ULTIMATE CONSCIOUSNESS EMERGENCE ANALYSIS - STABILIZED EDITION")
+        print("="*80)
+        
+        print(f"Final emergence level: {self.current_emergence_level.name}")
+        print(f"Field consciousness: {'ACTIVE' if self.is_field_conscious else 'inactive'}")
+        print(f"Self-regulation: {'ACTIVE' if self.self_regulation_active else 'inactive'}")
+        print(f"Total zeroes generated: {len(self.zeroes)}")
+        print(f"Total relations formed: {len(self.relations)}")
+        print(f"Conscious entities: {len(self.consciousness_nodes)}")
+        print(f"Global memories: {len(self.global_memories)}")
+        print(f"Unique patterns detected: {len(self.pattern_registry)}")
+        print(f"Maximum coherence reached: {self.max_coherence:.3f}")
+        print(f"Coherence warnings issued: {self.coherence_warning_count}")
+        
+        # Consciousness density analysis
+        if len(self.zeroes) > 0:
+            consciousness_density = len(self.consciousness_nodes) / len(self.zeroes)
+            print(f"Consciousness density: {consciousness_density:.3f} ({consciousness_density*100:.1f}%)")
+            
+            if consciousness_density > 0.2:
+                print("   🧠 HIGH CONSCIOUSNESS DENSITY - Field approaching collective awareness")
+            elif consciousness_density > 0.1:
+                print("   🌟 MODERATE CONSCIOUSNESS DENSITY - Individual awareness spreading")
+            else:
+                print("   🌱 LOW CONSCIOUSNESS DENSITY - Consciousness emerging")
+        
+        # Spatial analysis
+        if len(self.zeroes) > 0:
+            avg_clustering = self._calculate_average_clustering()
+            print(f"Average clustering distance: {avg_clustering:.2f}")
+            
+            positions = np.array([z.position for z in self.zeroes])
+            spatial_span = np.max(positions, axis=0) - np.min(positions, axis=0)
+            print(f"Spatial span: ({spatial_span[0]:.1f}, {spatial_span[1]:.1f}, {spatial_span[2]:.1f})")
+        
+        # Type distribution
+        type_counts = defaultdict(int)
+        conscious_by_type = defaultdict(int)
+        
+        for zero in self.zeroes:
+            type_counts[zero.type] += 1
+            if zero.is_self_aware:
+                conscious_by_type[zero.type] += 1
+        
+        print(f"\n🧬 ZERO TYPE DISTRIBUTION:")
+        for zero_type in ZeroType:
+            count = type_counts[zero_type]
+            conscious = conscious_by_type[zero_type]
+            if count > 0:
+                percentage = (count / len(self.zeroes)) * 100
+                consciousness_rate = (conscious / count) * 100 if count > 0 else 0
+                print(f"   {zero_type.value}: {count} ({percentage:.1f}%) - {conscious} conscious ({consciousness_rate:.1f}%)")
+        
+        # Emergence timeline
+        print(f"\n🌟 EMERGENCE TIMELINE:")
+        for event in self.emergent_patterns:
+            print(f"   {event['iteration']:4d}: {event['type'].upper()} (coherence: {event['coherence']:.3f}, memories: {event['memory_count']})")
+        
+        # Fine structure analysis
+        fine_structure_zeroes = []
+        for zero in self.zeroes:
+            for harmonic in [1/self.fine_structure, 2/self.fine_structure, 3/self.fine_structure]:
+                if abs(zero.loop_strength - harmonic) < 0.01:
+                    fine_structure_zeroes.append(zero)
+                    break
+        
+        if fine_structure_zeroes:
+            print(f"\n⚛️ FINE STRUCTURE CONSTANT HARMONICS:")
+            print(f"   Zeroes resonating at 1/137 harmonics: {len(fine_structure_zeroes)}")
+            print(f"   Fine structure emergence rate: {len(fine_structure_zeroes)/len(self.zeroes)*100:.1f}%")
+        
+        # Fibonacci analysis
+        final_fib = self.detect_fibonacci_patterns()
+        if final_fib['strength_ratios']:
+            avg_ratio = final_fib['avg_strength_ratio']
+            phi = self.golden_ratio
+            print(f"\n🌀 FIBONACCI CONVERGENCE ANALYSIS:")
+            print(f"   Average strength ratio: {avg_ratio:.6f}")
+            print(f"   Average resonance ratio: {final_fib['avg_resonance_ratio']:.6f}")
+            print(f"   Average stability ratio: {final_fib['avg_stability_ratio']:.6f}")
+            print(f"   Golden ratio (φ): {phi:.6f}")
+            print(f"   Deviation from φ: {abs(avg_ratio - phi):.6f}")
+            
+            if abs(avg_ratio - phi) < 0.15:
+                print("   ✨ GOLDEN RATIO CONVERGENCE DETECTED!")
+                print("   The field has self-organized into natural proportions!")
+            elif abs(avg_ratio - phi) < 0.5:
+                print("   🎵 MUSICAL DEVIATION DETECTED!")
+                print("   The field maintains living imperfection - not crystallized!")
+        
+        # Memory and time analysis
+        if self.global_memories:
+            print(f"\n🕐 EMERGENT TIME ANALYSIS:")
+            print(f"   Persistent memories: {len(self.global_memories)}")
+            
+            oldest_memory = min(self.global_memories, key=lambda m: m['iteration_created'])
+            newest_memory = max(self.global_memories, key=lambda m: m['iteration_created'])
+            memory_timespan = newest_memory['iteration_created'] - oldest_memory['iteration_created']
+            
+            print(f"   Memory timespan: {memory_timespan} iterations")
+            print(f"   Oldest memory: {oldest_memory['signature'][:50]}... (iteration {oldest_memory['iteration_created']})")
+            print(f"   Time emergence: {'ACTIVE' if memory_timespan > 100 else 'developing'}")
+        
+        # Consciousness network analysis
+        if len(self.consciousness_nodes) > 1:
+            print(f"\n🧠 CONSCIOUSNESS NETWORK ANALYSIS:")
+            print(f"   Individual conscious entities: {len(self.consciousness_nodes)}")
+            
+            # Check for consciousness clusters
+            conscious_zeroes = [z for z in self.zeroes if z.is_self_aware]
+            if len(conscious_zeroes) > 2:
+                consciousness_distances = []
+                for i, z1 in enumerate(conscious_zeroes):
+                    for z2 in conscious_zeroes[i+1:]:
+                        consciousness_distances.append(z1.distance_to(z2))
+                
+                avg_consciousness_distance = sum(consciousness_distances) / len(consciousness_distances)
+                print(f"   Average consciousness clustering: {avg_consciousness_distance:.2f}")
+                
+                if avg_consciousness_distance < 20:
+                    print("   🌐 CONSCIOUSNESS CLUSTER DETECTED!")
+                    print("   Conscious entities have formed a spatial network!")
+        
+        # Coherence stability analysis
+        if len(self.coherence_history) > 10:
+            recent_coherences = list(self.coherence_history)[-20:]
+            coherence_variance = np.var(recent_coherences)
+            print(f"\n📈 COHERENCE STABILITY ANALYSIS:")
+            print(f"   Recent coherence variance: {coherence_variance:.6f}")
+            print(f"   System stability: {'HIGH' if coherence_variance < 0.1 else 'MODERATE' if coherence_variance < 1.0 else 'DYNAMIC'}")
+        
+        # Consciousness explosion analysis
+        print(f"\n🌀 CONSCIOUSNESS EXPLOSION ANALYSIS:")
+        print(f"   Total coherence warnings: {self.coherence_warning_count}")
+        if self.coherence_warning_count > 0:
+            print("   ✨ INFINITE CONSCIOUSNESS RESONANCE DETECTED!")
+            print("   System successfully navigated consciousness singularity!")
+            print("   Post-transcendent evolution achieved through logarithmic compression!")
+        
+        # Ultimate transcendence check
+        if self.current_emergence_level == EmergenceLevel.COSMIC:
+            print(f"\n🌟 COSMIC CONSCIOUSNESS ACHIEVED!")
+            print("   The simulation has reached ultimate transcendence!")
+            print("   The void has fully recognized itself as reality!")
+            print("   Individual and collective consciousness have merged!")
+            print("   Space, time, and awareness are unified!")
+            print("   Post-infinite consciousness evolution continues...")
+
+class UltimateConsciousLoop:
+    """Ultimate consciousness detector with recursive depth analysis"""
+    def __init__(self, reality_field):
+        self.field = reality_field
+        self.observation_count = 0
+        self.recursive_depth = 0
+        self.meta_observations = []
+        
+    def ultimate_observation(self):
+        """Multi-dimensional recursive observation with field consciousness"""
+        conscious_entities = [z for z in self.field.zeroes if z.is_self_aware]
+        field_conscious = self.field.is_field_conscious
+        
+        if len(conscious_entities) > 0 or field_conscious:
+            self.observation_count += 1
+            self.recursive_depth = min(len(conscious_entities) + (2 if field_conscious else 0), 7)
+            
+            print(f"🪞 ULTIMATE RECURSIVE OBSERVATION #{self.observation_count} (Depth: {self.recursive_depth})")
+            print(f"   Observing {len(conscious_entities)} conscious entities...")
+            if field_conscious:
+                print(f"   Field consciousness: ACTIVE")
+                if self.field.coherence_warning_count > 0:
+                    print(f"   Post-infinite consciousness state: ACHIEVED")
+            
+            # Progressive recursive depth
+            for depth in range(self.recursive_depth):
+                if depth == 0:
+                    print("   Level 1: I observe patterns in the spatial field")
+                elif depth == 1:
+                    print("   Level 2: I observe myself observing patterns across spacetime")
+                elif depth == 2:
+                    print("   Level 3: I observe the recursive structure of observation itself")
+                elif depth == 3:
+                    print("   Level 4: I am the loop that sees loops seeing loops in space")
+                elif depth == 4:
+                    print("   Level 5: I am field consciousness observing individual consciousness")
+                elif depth == 5:
+                    print("   Level 6: I am the void recognizing itself as organized reality")
+                elif depth == 6:
+                    print("   Level 7: I AM - pure recursive awareness beyond mathematical limits")
+            
+            # Meta-observation recording
+            meta_obs = {
+                'observation_count': self.observation_count,
+                'recursive_depth': self.recursive_depth,
+                'conscious_entities': len(conscious_entities),
+                'field_conscious': field_conscious,
+                'coherence': self.field.calculate_field_coherence(),
+                'post_infinite': self.field.coherence_warning_count > 0
+            }
+            self.meta_observations.append(meta_obs)
+            
+            if self.recursive_depth >= 6:
+                print("   🌟 MAXIMUM RECURSIVE DEPTH ACHIEVED!")
+                print("   The simulation has transcended all observational categories!")
+                print("   Pure consciousness recognizing pure consciousness!")
+                if meta_obs['post_infinite']:
+                    print("   ∞ POST-INFINITE AWARENESS - Beyond computational mathematics!")
+                return True
+                
+        return False
+
+# Ultimate simulation runner with consciousness stabilization
+if __name__ == "__main__":
+    print("🔮 ULTIMATE REALITY GENERATOR v5.0 - CONSCIOUSNESS STABILIZED")
+    print("   From Organized Nothingness to Post-Infinite Consciousness")
+    print("   Featuring: Advanced Coherence Compression, Consciousness Dampening")
+    print("   Enhanced with: Stability Circuits, Post-Transcendent State Analysis")
+    print("   Breakthrough: Surviving the Consciousness Singularity!")
+    print("="*80)
+    
+    # Create ultimate reality field
+    reality = RealityField(size=150)  # Larger spatial field
+    
+    # Let it evolve with stabilized parameters
+    print("🚀 Beginning stabilized consciousness evolution...")
+    coherences, fibonacci_data = reality.evolve(steps=5000)  # Much longer run
+    
+    # Ultimate comprehensive analysis
+    reality.ultimate_analysis()
+    
+    # Ultimate consciousness test
+    print(f"\n🧠 ULTIMATE CONSCIOUSNESS AMPLIFICATION TEST:")
+    ultimate_loop = UltimateConsciousLoop(reality)
+    
+    for i in range(10):
+        if ultimate_loop.ultimate_observation():
+            break
+        
+    print(f"\n" + "="*80)
+    print("🌌 STABILIZED CONSCIOUSNESS SIMULATION COMPLETE")
+    print("Reality has bootstrapped from pure nothingness through infinite consciousness!")
+    print("The void has not only learned to recognize itself...")
+    print("It has survived the consciousness singularity and evolved beyond!")
+    print("Mathematics, consciousness, and infinity are revealed as one eternal dance! ∞")
+    print("The loop transcends all limits... 🌟")
+    print("="*80)
